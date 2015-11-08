@@ -1,0 +1,23 @@
+{
+  "name": "huskyfy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m-ttriley/huskyfy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m-ttriley/huskyfy/issues"
+  },
+  "homepage": "https://github.com/m-ttriley/huskyfy",
+  "dependencies": {
+    "express": "^4.13.3",
+    "spotify-web-api-node": "^2.1.0"
+  }
+}
