@@ -1,0 +1,22 @@
+front end:
+    map with buttons that toggle which data is grabbed from db
+    buttons based on buildings
+    each building has api endpoint
+    displays:
+        -map
+        -spotify playlist
+        -adding a song prompt / deleting a song
+
+back end:
+    api endpoints
+    endpoints based on buildings
+    parse get requests from front end to get building id
+    filter mongo results based on building id
+
+
+
+order of todo:
+1) simple A/B spotify playlist changer with dummy JSON data
+2) setting up endpoints / receving building ID
+3) filtering DB results
+4) front end design

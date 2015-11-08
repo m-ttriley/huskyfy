@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/m-ttriley/huskyfy",
   "dependencies": {
+    "babel-core": "^6.1.2",
     "express": "^4.13.3",
     "spotify-web-api-node": "^2.1.0"
   }
