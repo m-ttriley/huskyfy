@@ -1,0 +1,78 @@
+'use strict';
+
+var fs = require('fs');
+var express = require('express');
+var app = express();
+var mongoose = require('mongoose');
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var mongodb = require('mongodb');
+var url = 'mongodb://matt:riley@ds053794.mongolab.com:53794/huskyfy';
+var SpotifyWebApi = require('spotify-web-api-node');
+var spotifyApi = new SpotifyWebApi();
+
+var connect = function connect() {
+    var options = { server: { socketOptions: { keepAlive: 1 } } };
+    mongoose.connect(url, options);
+};
+
+connect();
+
+mongoose.connection.on('error', console.log);
+mongoose.connection.on('disconnected', connect);
+
+app.use(express['static'](__dirname + '/public'));
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));
+app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+app.use(methodOverride('X-HTTP-Method-Override'));
+
+
+// SCHEMA GOES HERE:
+var Song = mongoose.model('Song', {
+    building: Number,
+    trackURL: String
+});
+
+
+// to get the whole list of songs
+app.get('/api/song', function (req, res) {
+
+    Song.find(function (err, users) {
+        if (err) res.send(err);
+
+        res.json(users);
+    });
+});
+
+
+// posting a new song to our database
+app.post('/api/song', function (req, res) {
+    console.log(req.body.building);
+    console.log(req.body.trackURL);
+    console.log("post started");
+
+    var newSong = new Song({
+        building: req.body.building,
+        trackURL: req.body.trackURL
+    });
+
+    newSong.save(function (err) {
+        if (err) console.log('registration failed');
+    });
+
+    Song.find(function (err, users) {
+        if (err) res.send(err);
+
+        console.log(users);
+    });
+});
+
+app.get('/', function (req, res) {
+    res.sendfile('./public/index.html');
+});
+
+app.listen(9000);
+console.log('app listening on 8080');
