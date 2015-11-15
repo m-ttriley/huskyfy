@@ -15,6 +15,12 @@ var Container = React.createClass({
         });
     },
 
+    setSong: function(uri) {
+      this.setState({
+            currentSong:  'https://embed.spotify.com/?uri=' + uri;
+      })
+    },
+
     render: function() {
         return (
             <div>
