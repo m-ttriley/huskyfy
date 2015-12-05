@@ -5,12 +5,15 @@ from tkinter.ttk import *
 import admin.tabs
 import admin.song_view
 from admin.song import *
-from pymongo import MongoClient
+
 
 class Application:
     """
     Wrapper to coordinate the execution of the admin application
     """
+
+    # store database as a class field so all components can make queries
+    db = None
 
     def __init__(self, db):
         """
@@ -18,6 +21,7 @@ class Application:
         :param db:  the database connection to use for populating this application
         """
         self.db = db
+        Application.db = db
         self.building_collection = db["buildings"]
         self.song_collection = db["songs"]
 
@@ -43,7 +47,6 @@ class Application:
 
         self.render()
         self.root.mainloop()
-
 
     def _get_buildings(self):
         """

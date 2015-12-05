@@ -4,7 +4,7 @@ class Song:
     """
     Wrapper object containing song information
     """
-    def __init__(self, title, artist, album, uri, building_id, user=None, date=None):
+    def __init__(self, id, title, artist, album, uri, building_id, user=None, date=None):
         """
         Initialize the song with the given information
         :param title: title of the song as a string
@@ -14,6 +14,7 @@ class Song:
         :param user: the username of the person who added the song as a string
         :return:
         """
+        self.id = id
         self.title = title
         self.artist = artist
         self.album = album
@@ -31,6 +32,7 @@ class Song:
         Initialize a song based on responses from the db
         :param json: the dictionary containing the json response from the db
         """
+        song_id = json["_id"]
         title = json["title"]
         artist = json["artist"]
         album = json["album"]
@@ -38,5 +40,5 @@ class Song:
         user = json["user"]
         building_id = json["building_id"]
         date = json["date"]
-        return cls(title, artist, album, uri, building_id, user, date)
+        return cls(song_id, title, artist, album, uri, building_id, user, date)
 

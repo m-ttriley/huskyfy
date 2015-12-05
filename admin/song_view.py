@@ -2,6 +2,7 @@ __author__ = 'Nick Flanders'
 
 from tkinter import *
 from tkinter.ttk import *
+from admin.info_view import *
 
 
 class SongView(Treeview):
@@ -28,6 +29,7 @@ class SongView(Treeview):
             self.column(name, width=SongView._col_widths[index])
         self.add_songs(songs)
         self["show"] = "headings"
+        self.bind("<Double-1>", self._onDoubleClick)
 
     def add_songs(self, new_songs: list):
         """
@@ -37,3 +39,10 @@ class SongView(Treeview):
         for song in new_songs:
             self.insert('', 'end', values=(song.title, song.artist, song.album, song.uri, song.user, song.date))
         self.songs += new_songs
+
+    def _onDoubleClick(self, event):
+        """
+        Handle a double click action on a specific item in this SongView
+        """
+        index = self.index(self.identify_row(event.y))
+        InfoView(self.songs[index])

@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import datetime
 
 # confirm that the user want to overwrite all the data in the db before doing so
-if input("Are you sure you want to overwrite all data in the database with sample data? (y/n)") != 'y':
+if input("Are you sure you want to overwrite all data in the database with sample data? (y/n) ") != 'y':
     sys.exit(0)
 
 
@@ -61,8 +61,6 @@ other = [
 
 ]
 
-
-
 # build up a list of all of the buildings
 building_list = []
 # track the ids assigned to all of the buildings
@@ -115,7 +113,19 @@ song_data = [
     (ids["WVF"], "American Money", "Borns", "Dopamine", "spotify:track:4AewKenHXKBt643p473xCk",
     "Nick", datetime.datetime(2015, 12, 2, 11, 23)),
     (ids["Cabot"], "Migraine", "twenty one pilots", "Vessel", "spotify:track:4rfaoyaZvNa60cj3OKSQV9",
-    "Nick", datetime.datetime(2015, 12, 4, 13, 23))
+    "Nick", datetime.datetime(2015, 12, 4, 13, 23)),
+    (ids["WVF"], "Simple & Sweet", "Jon Bellion", "The Definition", "spotify:track:0wUlGPa8He68F9TmLKdcL4",
+     "Nick", datetime.datetime(2015, 11, 30, 13, 10)),
+    (ids["WVF"], "Jealous (I Ain't With It)", "Chromeo", "White Women", "spotify:track:3R5FA1Ay1NxgtwbElR78by",
+    "Nick", datetime.datetime(2015, 11, 30, 14, 2)),
+    (ids["Marino"], "Diane Young", "Vampire Weekend", "Modern Vampires of the City", "spotify:track:104pmtTQOlmW8Zt2BipGKH",
+    "Nick", datetime.datetime(2015, 12, 1, 2, 23)),
+    (ids["Marino"], "Clearest Blue", "CHVRCHES", "Every Open Eye", "spotify:track:3aUfWeMesfVs2niopKjNxV",
+    "Nick", datetime.datetime(2015, 12, 2, 12, 54)),
+    (ids["WVF"], "Taxi Cab", "twenty one pilots", "Twenty One Pilots", "spotify:track:4j8gmCSLLy0TSFg2brV01g",
+    "Nick", datetime.datetime(2015, 12, 3, 23, 54)),
+    (ids["Cabot"], "Goner", "twenty one pilots", "Blurryface", "spotify:track:5P3yUXUC9rZPJPNmYGKEAz",
+    "Nick", datetime.datetime(2015, 12, 3, 5, 32))
 ]
 
 # create a list of dictionaries to insert as songs into the db
@@ -132,3 +142,5 @@ buildings.insert_many(building_list)
 # remove any songs that were already in the db
 songs.remove()
 songs.insert_many(songs_list)
+
+print("Database updated with {} songs and {} buildings.".format(len(songs_list), len(building_list)))
