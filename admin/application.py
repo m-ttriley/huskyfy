@@ -47,7 +47,7 @@ class Application:
         # initialize the search box and the search button
         self.search_value = StringVar()
         self.search_box = Entry(self.root, width=90, font=("Arial", 12), textvariable=self.search_value)
-        self.search_button = Button(self.root, text="Search", width=10)
+        self.search_button = Button(self.root, text="Search", width=10, command=self.search)
 
         # initialize the drop down menu for selecting the type of building
         self._init_optionmenu()
@@ -76,7 +76,8 @@ class Application:
         try:
             self.tabs.destroy()
         except AttributeError:
-            pass # tabs doesn't exist yet
+            # tabs widget doesn't exist yet
+            pass
 
         self.tabs = admin.tabs.Tabs(
             [result["display_name"] for result in self.buildings[self.building_type]],
@@ -124,6 +125,22 @@ class Application:
         Displays a dialogue box for adding a new song
         """
         admin.info_view.InfoView(Song(None, "", "", "", "", building_id=None))
+
+    def search(self):
+        """
+        Opens a new window with the result of searching the given string across title, artist, album, and user
+        """
+        search_string = self.search_value.get()
+        results = []
+        results += list(self.song_collection.find({"title": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+        if search_string != "":
+            results += list(self.song_collection.find({"artist": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+            results += list(self.song_collection.find({"album": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+            results += list(self.song_collection.find({"user": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+
+        popup = admin.song_view.SongView(parent=Toplevel(),
+                                 songs=[Song.from_dict(result) for result in results])
+        popup.grid()
 
     def render(self):
         """
