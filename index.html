@@ -8,9 +8,148 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
+
+<div id="mapholder">
+</div>
 <div id="content">
 </div>
 
-<script type="text/babel" src="public/app.js"></script>
+<script type="text/javascript">
+$(function() {
+(function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        
+    }
+})();
+
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=42.3380307,-71.0899268&zoom=17.33&size=500x500&sensor=false&markers=size:small%7Ccolor:0xff2600%7Clabel:2%7C" + latlon;
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+};
+
+});
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+</script>
+<script type="text/babel">
+    var Container = React.createClass({
+    getInitialState: function() {
+        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'}
+    },
+
+    songA: function() {
+        this.setState({
+            currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'
+        });
+    },
+
+    songB: function() {
+        this.setState({
+            currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A5H25xsIuRWUI8GwcoAoeSG' 
+        });
+    },
+
+    render: function() {
+        return (
+            <div>
+            <div>
+            </div>
+            <div> 
+            <button type='button' onClick={this.songA} />
+            <Player song={this.state.currentSong} />
+            <button type='button' onClick={this.songB} />
+            </div>
+            <div>
+            <Signup url="/api/song" />
+            </div>
+            </div>
+            );
+        }
+    });
+
+var Player = React.createClass({
+    render: function() {
+        return (
+            <iframe src={this.props.song} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
+            );
+    }
+});
+
+var Signup = React.createClass({
+
+    handleSignup: function(data) {
+      $.ajax({
+        url: this.props.url,
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    },
+
+    render: function() {
+      return (
+        <div>
+          <SignupForm handleSignup={this.handleSignup} />
+        </div>
+      );
+    }
+  });
+
+  var SignupForm = React.createClass({
+    handleSubmit: function(e) {
+    e.preventDefault();
+    var building = React.findDOMNode(this.refs.building).value.trim();
+        var trackURL = React.findDOMNode(this.refs.trackURL).value.trim();
+        if (!trackURL || !building) {
+            return;
+          }
+        this.props.handleSignup({
+          building: building,
+          trackURL: trackURL
+        });
+        React.findDOMNode(this.refs.building).value = '';
+        React.findDOMNode(this.refs.trackURL).value = '';
+        return;
+      },
+
+      render: function() {
+        return (
+          <form className="signupForm" onSubmit={this.handleSubmit}>
+            <input type="number" placeholder="enter the building ID" ref="building" />
+            <input type="text" placeholder="enter the song URL" ref="trackURL" />
+            <input type="submit" value="sign up" />
+          </form>
+          );
+      }
+  });
+
+ReactDOM.render(
+    <Container />, 
+    document.getElementById('content'));
+</script>
 </body>
 </html>

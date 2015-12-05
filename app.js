@@ -1,6 +1,21 @@
 var Container = React.createClass({
     getInitialState: function() {
-        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'};
+        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k',
+                loc: {this.getLocation()};
+    },
+
+    getLocation: function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+        var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+        var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+
+        return img_url;
+
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
     },
 
     songA: function() {
@@ -24,6 +39,9 @@ var Container = React.createClass({
     render: function() {
         return (
             <div>
+            <div>
+            <img src={this.state.loc} />
+            </div>
             <div> 
             <button type='button' onClick={this.songA} />
             <Player song={this.state.currentSong} />
@@ -40,7 +58,7 @@ var Container = React.createClass({
 var Player = React.createClass({
     render: function() {
         return (
-            <iframe src={this.props.song} width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src={this.props.song} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
             );
     }
 });
