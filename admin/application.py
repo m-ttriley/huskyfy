@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter.ttk import *
 import admin.tabs
 import admin.song_view
+import admin.info_view
 from admin.song import *
 
 
@@ -15,11 +16,17 @@ class Application:
     # store database as a class field so all components can make queries
     db = None
 
+    # only allow one instance of the application to run at a time
+    instance = None
+
     def __init__(self, db):
         """
         Initializes this Application
         :param db:  the database connection to use for populating this application
         """
+        if Application.instance is not None:
+            Application.instance.root.focus_force()
+            return
         self.db = db
         Application.db = db
         self.building_collection = db["buildings"]
@@ -27,7 +34,7 @@ class Application:
 
         # initialize all GUI components visible at startup
         self.root = Tk()
-        self.root.geometry("800x600")
+        self.root.geometry("1040x520")
         self.root.title("Huskyfy Admin Manager")
 
         # initialize a dictionary mapping building types to lists of buildings from the db
@@ -39,13 +46,17 @@ class Application:
 
         # initialize the search box and the search button
         self.search_value = StringVar()
-        self.search_box = Entry(self.root, width=51, font=("Arial", 12), textvariable=self.search_value)
-        self.search_button = Button(self.root, text="Search", width=10)
+        self.search_box = Entry(self.root, width=90, font=("Arial", 12), textvariable=self.search_value)
+        self.search_button = Button(self.root, text="Search", width=10, command=self.search)
 
         # initialize the drop down menu for selecting the type of building
         self._init_optionmenu()
 
+        # initialize the add song button
+        self.add_button = Button(self.root, text="Add Song", width=10, command=self.add_song)
+
         self.render()
+        Application.instance = self
         self.root.mainloop()
 
     def _get_buildings(self):
@@ -65,16 +76,23 @@ class Application:
         try:
             self.tabs.destroy()
         except AttributeError:
-            pass # tabs doesn't exist yet
+            # tabs widget doesn't exist yet
+            pass
 
         self.tabs = admin.tabs.Tabs(
             [result["display_name"] for result in self.buildings[self.building_type]],
             parent=self.root)
+
+        self.tabs.bind("<<NotebookTabChanged>>", lambda event: self._set_selected_tab())
         for page, building in enumerate(self.buildings[self.building_type]):
             song_response = self.song_collection.find(
                 {"building_id": self.building_collection.find_one(
                     {"display_name": building["display_name"]})["_id"]})
             self.tabs.add_songs(page, [Song.from_dict(record) for record in song_response])
+        try:
+            self.tabs.select(self.current_tab_index)
+        except AttributeError:
+            self.current_tab_index = 0
 
     def _init_optionmenu(self):
         """
@@ -92,15 +110,45 @@ class Application:
         Sets the building type of this Application
         """
         self.building_type = building_type
+        del self.current_tab_index
         self._init_tabs()
         self.render()
+
+    def _set_selected_tab(self):
+        """
+        Sets the currently selected tab for the Notebook
+        """
+        self.current_tab_index = self.tabs.index(self.tabs.select())
+
+    def add_song(self):
+        """
+        Displays a dialogue box for adding a new song
+        """
+        admin.info_view.InfoView(Song(None, "", "", "", "", building_id=None))
+
+    def search(self):
+        """
+        Opens a new window with the result of searching the given string across title, artist, album, and user
+        """
+        search_string = self.search_value.get()
+        results = []
+        results += list(self.song_collection.find({"title": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+        if search_string != "":
+            results += list(self.song_collection.find({"artist": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+            results += list(self.song_collection.find({"album": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+            results += list(self.song_collection.find({"user": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
+
+        popup = admin.song_view.SongView(parent=Toplevel(),
+                                 songs=[Song.from_dict(result) for result in results])
+        popup.grid()
 
     def render(self):
         """
         Renders the GUI
         """
-        self.tabs.grid(row=0, column=0, pady=10, columnspan=2, rowspan=10)
-        self.search_box.grid(row=10, column=0)
+        self.tabs.grid(row=0, column=0, pady=10, padx=10, columnspan=2, rowspan=10)
+        self.search_box.grid(row=10, column=0, padx=10)
         self.search_button.grid(row=10, column=1)
+        self.add_button.grid(row=7, column=2)
         self.menu_label.grid(row=3, column=2)
         self.menu.grid(row=4, column=2)

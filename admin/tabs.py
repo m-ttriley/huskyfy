@@ -19,8 +19,9 @@ class Tabs(Notebook):
         super(Tabs, self).__init__(master=parent)
         self.titles = titles
         self.frames = [Frame(self) for _ in titles]
+        self.song_views = []
         for index, frame in enumerate(self.frames):
-            self.add(frame, text=self.titles[index])
+            self.add(frame, text="  " + self.titles[index] + "  ")
 
     def add_songs(self, page: int, songs: list):
         """
@@ -29,5 +30,6 @@ class Tabs(Notebook):
         """
         if len(self.frames) > page:
             song_list = admin.song_view.SongView(parent=self.frames[page], songs=songs)
+            self.song_views.append(song_list)
             song_list.pack()
 
