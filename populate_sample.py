@@ -97,25 +97,25 @@ for full, short, lattitude, longitude in other:
 # song tuple structure
 #(building id, song title, artist, album, uri, user, date)
 song_data = [
-    (ids["Marino"], "Instant Crush", "Daft Punk", "Random Access Memories", "spotify:track:2cGxRwrMyEAp8dEbuZaVv6",
+    (ids["Marino"], "Instant Crush", "Daft Punk", "Random Access Memories", "2cGxRwrMyEAp8dEbuZaVv6",
     "Nick", datetime.datetime(2015, 12, 4, 12, 20)),
-    (ids["IV"], "One More Time", "Daft Punk", "Discovery", "spotify:track:0DiWol3AO6WpXZgp0goxAV",
+    (ids["IV"], "One More Time", "Daft Punk", "Discovery", "0DiWol3AO6WpXZgp0goxAV",
     "Nick", datetime.datetime(2015, 12, 3, 17, 50)),
-    (ids["WVF"], "American Money", "Borns", "Dopamine", "spotify:track:4AewKenHXKBt643p473xCk",
+    (ids["WVF"], "American Money", "Borns", "Dopamine", "4AewKenHXKBt643p473xCk",
     "Nick", datetime.datetime(2015, 12, 2, 11, 23)),
-    (ids["Cabot"], "Migraine", "twenty one pilots", "Vessel", "spotify:track:4rfaoyaZvNa60cj3OKSQV9",
+    (ids["Cabot"], "Migraine", "twenty one pilots", "Vessel", "4rfaoyaZvNa60cj3OKSQV9",
     "Nick", datetime.datetime(2015, 12, 4, 13, 23)),
-    (ids["WVF"], "Simple & Sweet", "Jon Bellion", "The Definition", "spotify:track:0wUlGPa8He68F9TmLKdcL4",
+    (ids["WVF"], "Simple & Sweet", "Jon Bellion", "The Definition", "0wUlGPa8He68F9TmLKdcL4",
      "Nick", datetime.datetime(2015, 11, 30, 13, 10)),
-    (ids["WVF"], "Jealous (I Ain't With It)", "Chromeo", "White Women", "spotify:track:3R5FA1Ay1NxgtwbElR78by",
+    (ids["WVF"], "Jealous (I Ain't With It)", "Chromeo", "White Women", "3R5FA1Ay1NxgtwbElR78by",
     "Nick", datetime.datetime(2015, 11, 30, 14, 2)),
-    (ids["Marino"], "Diane Young", "Vampire Weekend", "Modern Vampires of the City", "spotify:track:104pmtTQOlmW8Zt2BipGKH",
+    (ids["Marino"], "Diane Young", "Vampire Weekend", "Modern Vampires of the City", "104pmtTQOlmW8Zt2BipGKH",
     "Nick", datetime.datetime(2015, 12, 1, 2, 23)),
-    (ids["Marino"], "Clearest Blue", "CHVRCHES", "Every Open Eye", "spotify:track:3aUfWeMesfVs2niopKjNxV",
+    (ids["Marino"], "Clearest Blue", "CHVRCHES", "Every Open Eye", "3aUfWeMesfVs2niopKjNxV",
     "Nick", datetime.datetime(2015, 12, 2, 12, 54)),
-    (ids["WVF"], "Taxi Cab", "twenty one pilots", "Twenty One Pilots", "spotify:track:4j8gmCSLLy0TSFg2brV01g",
+    (ids["WVF"], "Taxi Cab", "twenty one pilots", "Twenty One Pilots", "4j8gmCSLLy0TSFg2brV01g",
     "Nick", datetime.datetime(2015, 12, 3, 23, 54)),
-    (ids["Cabot"], "Goner", "twenty one pilots", "Blurryface", "spotify:track:5P3yUXUC9rZPJPNmYGKEAz",
+    (ids["Cabot"], "Goner", "twenty one pilots", "Blurryface", "5P3yUXUC9rZPJPNmYGKEAz",
     "Nick", datetime.datetime(2015, 12, 3, 5, 32))
 ]
 
