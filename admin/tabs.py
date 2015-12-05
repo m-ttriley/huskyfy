@@ -30,3 +30,4 @@ class Tabs(Notebook):
         if len(self.frames) > page:
             song_list = admin.song_view.SongView(parent=self.frames[page], songs=songs)
             song_list.pack()
+

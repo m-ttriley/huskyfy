@@ -8,8 +8,8 @@ class SongView(Treeview):
     """
     Represents a list view for displaying lists of songs
     """
-    _columns = ("Song", "Artist", "Album", "URI", "User")
-    _col_widths = (150, 120, 120, 80, 80)
+    _columns = ("Song", "Artist", "Album", "URI", "User", "Date")
+    _col_widths = (150, 120, 120, 80, 80, 80)
 
     def __init__(self, parent=None, songs=None):
         """
@@ -35,5 +35,5 @@ class SongView(Treeview):
         :param songs: the list of Songs to add
         """
         for song in new_songs:
-            self.insert('', 'end', values=(song.title, song.artist, song.album, song.uri, song.user))
+            self.insert('', 'end', values=(song.title, song.artist, song.album, song.uri, song.user, song.date))
         self.songs += new_songs

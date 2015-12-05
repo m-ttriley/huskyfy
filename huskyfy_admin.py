@@ -10,11 +10,7 @@ Usage:
     python huskyfy_admin.py
 """
 
-from tkinter import *
-from tkinter.ttk import *
-import admin.tabs
-import admin.song_view
-import admin.song
+from admin.application import Application
 from pymongo import MongoClient
 
 
@@ -23,17 +19,30 @@ MONGO_URL = "mongodb://matt:riley@ds053794.mongolab.com:53794/huskyfy"
 client = MongoClient(MONGO_URL)
 db = client.huskyfy
 
+buildings = db["buildings"]
+songs = db["songs"]
+
+
+
 if __name__ == "__main__":
+    app = Application(db)
+    """
     root = Tk()
     root.grid()
     root.geometry("800x400")
-    tabs = admin.tabs.Tabs(["test", "foo", "bar"], parent=root)
-    tabs.add_songs(0, [admin.song.Song("test title " + str(i), "test artist", "test album",
-                                    "3jb23kj4rb23", user="Nick") for i in range(10)])
-    tabs.add_songs(1, [admin.song.Song("test title " + str(i), "test artist", "test album",
-                                    "fgnbrn4554y", user="Matt") for i in range(17)])
-    tabs.add_songs(2, [admin.song.Song("test title " + str(i), "test artist", "test album",
-                                    "qab34b435h5", user="Foo") for i in range(20)])
-    tabs.grid(row=0, column=0)
+
+    building_list = [result["display_name"] for result in buildings.find()]
+
+    tabs = admin.tabs.Tabs(building_list, parent=root)
+    song_results = songs.find({"building_id": buildings.find_one({"display_name": "WVF"})["_id"]})
+    tabs.add_songs(0, [Song.from_dict(record) for record in song_results])
+    tabs.grid(row=0, column=0, pady=10, columnspan=2)
+
+    search_value = StringVar()
+    search_box = Entry(root, width=51, font=("Arial", 12), textvariable=search_value)
+    search_box.grid(row=1, column=0)
+
+    search_button = Button(root, text="Search", width=10)
+    search_button.grid(row=1, column=1)
     root.title("Huskyfy Admin Manager")
-    root.mainloop()
+    root.mainloop()"""
