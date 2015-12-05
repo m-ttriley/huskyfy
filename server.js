@@ -22,13 +22,28 @@ connect();
 mongoose.connection.on('error', console.log);
 mongoose.connection.on('disconnected', connect);
 
-function getCollection(collec, )
+function getCollection(collec) {
+    return mongoose.connection.db.collection(collec);
+}
 function find (collec, query, callback) {
     mongoose.connection.db.collection(collec, function (err, collection) {
     collection.find(query).toArray(callback);
     });
 }
+function findClosestBuilding (lat, longitude, buildings) {
+    // Math.abs(x1-x0) + Math.abs(y1-y0)
+    var distance = 10000;
+    var closestBuilding = null;
+    buildings.map(function(building) {
+        var currentDistance = Math.abs(lat - building.latitude) + Math.abs(longitude - building.longitude);
+        if (currentDistance < distance) {
+            distance = currentDistance;
+            closestBuilding = building;
+        }
+    });
 
+    return closestBuilding;
+}
 app.use(express['static'](__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
@@ -62,6 +77,10 @@ var Song = mongoose.model('Song', {
 
 });
 
+
+app.get('/api/building/:latitude/:longitude', function (req, res, next) {
+  res.json(findClosestBuilding(req.params.latitude, req.params.longitude, getCollection('buildings'));
+});
 
 // to get the whole list of songs
 app.get('/api/song', function (req, res) {

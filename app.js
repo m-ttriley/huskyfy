@@ -1,8 +1,14 @@
 
 
-    var Container = React.createClass({
+var Container = React.createClass({
     getInitialState: function() {
-        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'}
+        return {
+          currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k',
+          location: {
+            latitude: 0,
+            longitude: 0
+          }
+        }
     },
 
     songA: function() {
@@ -55,7 +61,20 @@ var Signup = React.createClass({
         },
         success: function(data) {
           // todo: add this to the database
-          console.log(data.tracks.items[0].uri);
+          $.ajax({
+            url: '/api/song',
+            type: 'POST',
+            data: {
+              track: data.tracks.items[0]
+            }
+          },
+          success: function(data) {
+            // reload widget
+          },
+
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }
         },
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());

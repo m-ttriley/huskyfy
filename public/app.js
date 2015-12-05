@@ -1,11 +1,19 @@
+
+
 var Container = React.createClass({
     getInitialState: function() {
-        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'};
+        return {
+          currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k',
+          location: {
+            latitude: 0,
+            longitude: 0
+          }
+        }
     },
 
     songA: function() {
         this.setState({
-            currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'
+            currentSong: 'https://embed.spotify.com/?uri=spotify:user:121023616:playlist:0hmTkcOW36gH3JA53ILYZE'
         });
     },
 
@@ -18,6 +26,8 @@ var Container = React.createClass({
     render: function() {
         return (
             <div>
+            <div>
+            </div>
             <div> 
             <button type='button' onClick={this.songA} />
             <Player song={this.state.currentSong} />
@@ -34,21 +44,37 @@ var Container = React.createClass({
 var Player = React.createClass({
     render: function() {
         return (
-            <iframe src={this.props.song} width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src={this.props.song} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
             );
     }
 });
 
 var Signup = React.createClass({
 
-    handleSignup: function(data) {
+    handleSearch: function(query) {
       $.ajax({
-        url: this.props.url,
-        dataType: 'json',
-        type: 'POST',
-        data: data,
+        url: 'https://api.spotify.com/v1/search',
+        type: 'GET',
+        data: {
+          q: query,
+          type: 'track'
+        },
         success: function(data) {
-          console.log(data);
+          // todo: add this to the database
+          $.ajax({
+            url: '/api/song',
+            type: 'POST',
+            data: {
+              track: data.tracks.items[0]
+            }
+          },
+          success: function(data) {
+            // reload widget
+          },
+
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }
         },
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -59,7 +85,7 @@ var Signup = React.createClass({
     render: function() {
       return (
         <div>
-          <SignupForm handleSignup={this.handleSignup} />
+          <SignupForm handleSearch={this.handleSearch} />
         </div>
       );
     }
@@ -68,26 +94,20 @@ var Signup = React.createClass({
   var SignupForm = React.createClass({
     handleSubmit: function(e) {
     e.preventDefault();
-    var building = React.findDOMNode(this.refs.building).value.trim();
-        var trackURL = React.findDOMNode(this.refs.trackURL).value.trim();
-        if (!trackURL || !building) {
+        var trackURL = React.findDOMNode(this.refs.trackSearch).value.trim();
+        if (!trackURL) {
             return;
           }
-        this.props.handleSignup({
-          building: building,
-          trackURL: trackURL
-        });
-        React.findDOMNode(this.refs.building).value = '';
-        React.findDOMNode(this.refs.trackURL).value = '';
+        this.props.handleSearch(trackURL);
+        ReactDOM.findDOMNode(this.refs.trackSearch).value = '';
         return;
       },
 
       render: function() {
         return (
           <form className="signupForm" onSubmit={this.handleSubmit}>
-            <input type="number" placeholder="enter the building ID" ref="building" />
-            <input type="text" placeholder="enter the song URL" ref="trackURL" />
-            <input type="submit" value="sign up" />
+            <input type="text" placeholder="Search for a song to add" ref="trackSearch" />
+            <input type="submit" value="Add a song" />
           </form>
           );
       }
