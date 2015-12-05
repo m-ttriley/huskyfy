@@ -51,28 +51,17 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-/*
-// return the URI of top search result for the given track name
-function getSpotifyUri(songName) {
-    spotifyApi.searchTracks(songName, {limit: 1})
-    .then(function(data) {
-        var uri = data.body.tracks.items[0].uri;
-        console.log('Spotify URI of', songName, uri, "\n");
-        updatePlayer(uri);
-    }, function(err) {
-        console.error(err);
-    });
-}
-*/
 
-// getSpotifyUri("Technologic");
+
 
 // SCHEMA GOES HERE:
 var Song = mongoose.model('Song', {
-    building: Number,
-    trackURL: String,
+    building_id: Number,
+    uri: String,
+    title: String,
     artist: String,
     album: String,
+    user: String,
     date: Date
 
 });
@@ -97,18 +86,22 @@ app.get('/api/song', function (req, res) {
 
 // posting a new song to our database
 app.post('/api/song', function (req, res) {
-    console.log(req.body.building);
-    console.log(req.body.trackURL);
+    console.log(req.body.building_id);
+    console.log(req.body.uri);
+    console.log(req.body.title);
     console.log(req.body.artist);
     console.log(req.body.album);
+    console.log(req.body.user);
     console.log(req.body.date);
     console.log("post started");
 
     var newSong = new Song({
-        building: req.body.building,
-        trackURL: req.body.trackURL,
+        building_id: req.body.building_id,
+        uri: req.body.uri,
+        title: req.body.title,
         artist: req.body.artist,
         album: req.body.album,
+        user: req.body.user,
         date: req.body.date
     });
 
