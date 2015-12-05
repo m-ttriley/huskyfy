@@ -17,47 +17,35 @@ buildings = db["buildings"]
 songs = db["songs"]
 
 # building tuple structure
-# (building id, building name, display name, building type)
-names = ["Behrakis", "Blackman", "Cabot", "Cargill", "Churchill", "Curry", "Dodge",
-         "Ell Hall", "Matthews", "Marino", "Meserve", "Mugar", "Richards", "Robinson",
-         "Ryder", "Shillman", "Snell", "International Village"]
+# (building id, building name, display name, building type, lattitude, longitude)
+
 academic = [
-    ("Behrakis Health Science Center", "Behrakis"),
-    ("Blackman Auditorium", "Blackman"),
-    ("Cargill Hall", "Cargill"),
-    ("Churchill Hall", "Churchill"),
-    ("Dodge Hall", "Dodge"),
-    ("Egan Engineering/Science Reseach Center", "Egan"),
-    ("Ell Hall", "Ell"),
-    ("Hurtig Hall", "Hurtig"),
-    ("Kariotis Hall", "Kariotis"),
-    ("Richards Hall", "Richards"),
-    ("Shillman Hall", "Shillman"),
-    ("Snell Library and Engineering Center", "Snell"),
-    ("International Village", "IV"),
-    ("West Village F", "WVF"),
-    ("West Village H", "WVH"),
-    ("West Village G", "WVG")
+    ("Behrakis Health Science Center", "Behrakis", 42.336901, -71.091703),
+    ("Egan Engineering/Science Reseach Center", "Egan", 42.338132, -71.089094),
+    ("Ell Hall", "Ell", 42.339695, -71.088012),
+    ("Hurtig Hall", "Hurtig", 42.339778, -71.086141),
+    ("Kariotis Hall", "Kariotis", 42.338705, -71.090752),
+    ("Richards Hall", "Richards", 42.339934, -71.088794),
+    ("Ryder Hall", "Ryder", 42.336588, -71.090764),
+    ("Shillman Hall", "Shillman", 42.337595, -71.090267),
+    ("Snell Library and Engineering Center", "Snell", 42.338479, -71.088040),
+    ("International Village", "IV", 42.335086, -71.089382),
+    ("West Village F", "WVF", 42.337536, -71.091518),
+    ("West Village H", "WVH", 42.338703, -71.092205),
 ]
 
 residential = [
-    ("International Village", "IV"),
-    ("West Village F", "WVF"),
-    ("West Village H", "WVH"),
-    ("West Village G", "WVG"),
-    ("Davenport Commons", "Davenport"),
-    ("Kennedy Hall", "Kennedy"),
-    ("Kerr Hall", "Kerr"),
-    ("Smith Hall", "Smith"),
-    ("Speare Hall", "Speare"),
-    ("Stetson", "Stetson"),
-    ("Willis Hall", "Willis")
+    ("International Village", "IV", 42.335086, -71.089382),
+    ("West Village F", "WVF", 42.337536, -71.091518),
+    ("West Village H", "WVH", 42.338703, -71.092205),
+    ("Speare Hall", "Speare", 42.340614, -71.089642),
+    ("Stetson", "Stetson", 42.341218, -71.090464),
 ]
 
 other = [
-    ("Cabot Physical Education Center", "Cabot"),
-    ("Marino Recreation Center", "Marino"),
-    ("Curry Student Center", "Curry"),
+    ("Cabot Physical Education Center", "Cabot", 42.339567, -71.089858),
+    ("Marino Recreation Center", "Marino", 42.340350, -71.090349),
+    ("Curry Student Center", "Curry", 42.339100, -71.087469),
 
 ]
 
@@ -68,14 +56,15 @@ ids = dict()
 current_id = 0
 
 # add all of the academic buildings
-for full, short in academic:
+for full, short, lattitude, longitude in academic:
     building_list.append({"_id": current_id, "name": full,
-                          "display_name": short, "types": ["academic"]})
+                          "display_name": short, "types": ["academic"],
+                          "lattitude": lattitude, "longitude": longitude})
     ids[short] = current_id
     current_id += 1
 
 # add all of the residential buildings
-for full, short in residential:
+for full, short, lattitude, longitude in residential:
     found = False
     for building in building_list:
         if building["name"] == full:
@@ -83,12 +72,13 @@ for full, short in residential:
             found = True
     if not found:
         building_list.append({"_id": current_id, "name": full,
-                              "display_name": short, "types": ["residential"]})
+                              "display_name": short, "types": ["residential"],
+                              "lattitude": lattitude, "longitude":longitude})
         ids[short] = current_id
         current_id += 1
 
 # add all of the other buildings
-for full, short in other:
+for full, short, lattitude, longitude in other:
     found = False
     for building in building_list:
         if building["name"] == full:
@@ -96,7 +86,8 @@ for full, short in other:
             found = True
     if not found:
         building_list.append({"_id": current_id, "name": full,
-                              "display_name": short, "types": ["other"]})
+                              "display_name": short, "types": ["other"],
+                              "lattitude": lattitude, "longitude":longitude})
         ids[short] = current_id
         current_id += 1
 
