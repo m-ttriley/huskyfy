@@ -58,7 +58,8 @@ class InfoView(Frame):
         self.uri_box = Entry(master=self.parent, text=self.uri_var, width=40)
 
         # initialize update button
-        self.button = Button(self.parent, text="Update", command=self.update_db)
+        self.update_button = Button(self.parent, text="Update", command=self.update_db)
+        self.delete_button = Button(self.parent, text="Delete", command=self.delete_song)
 
         self.render()
         InfoView.instances.append(self)
@@ -72,9 +73,23 @@ class InfoView(Frame):
         date = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
         fields = {"title": self.song_var.get(), "artist": self.artist_var.get(), "album": self.album_var.get(),
                   "uri": self.uri_var.get(), "user": self.user_var.get(), "date": date,
-                  "building_id": self.building_var.get()}
-        self.song_collection.update({"_id": self.song.id}, fields)
+                  "building_id": int(self.building_var.get())}
+        if self.song.id is not None:
+            self.song_collection.update({"_id": self.song.id}, fields)
+        else:
+            self.song_collection.insert(fields)
+        self.parent.destroy()
+        admin.application.Application.instance._init_tabs()
+        admin.application.Application.instance.render()
 
+    def delete_song(self):
+        """
+        Removes the song associates with this InfoView from the database
+        """
+        self.song_collection.remove({"_id": self.song.id})
+        self.parent.destroy()
+        admin.application.Application.instance._init_tabs()
+        admin.application.Application.instance.render()
 
     def render(self):
         """
@@ -88,12 +103,13 @@ class InfoView(Frame):
         self.date_label.grid(row=5, column=0, padx=5, pady=7)
         self.uri_label.grid(row=6, column=0, padx=5, pady=7)
 
-        self.song_box.grid(row=0, column=1, padx=5, pady=7)
-        self.artist_box.grid(row=1, column=1, padx=5, pady=7)
-        self.album_box.grid(row=2, column=1, padx=5, pady=7)
-        self.building_box.grid(row=3, column=1, padx=5, pady=7)
-        self.user_box.grid(row=4, column=1, padx=5, pady=7)
-        self.date_box.grid(row=5, column=1, padx=5, pady=7)
-        self.uri_box.grid(row=6, column=1, padx=5, pady=7)
+        self.song_box.grid(row=0, column=1, padx=5, pady=7, columnspan=2)
+        self.artist_box.grid(row=1, column=1, padx=5, pady=7, columnspan=2)
+        self.album_box.grid(row=2, column=1, padx=5, pady=7, columnspan=2)
+        self.building_box.grid(row=3, column=1, padx=5, pady=7, columnspan=2)
+        self.user_box.grid(row=4, column=1, padx=5, pady=7, columnspan=2)
+        self.date_box.grid(row=5, column=1, padx=5, pady=7, columnspan=2)
+        self.uri_box.grid(row=6, column=1, padx=5, pady=7, columnspan=2)
 
-        self.button.grid(row=7, columnspan=2)
+        self.update_button.grid(row=7, column=1, padx=5, pady=7)
+        self.delete_button.grid(row=7, column=2, padx=5, pady=7)
