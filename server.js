@@ -22,6 +22,13 @@ connect();
 mongoose.connection.on('error', console.log);
 mongoose.connection.on('disconnected', connect);
 
+function getCollection(collec, )
+function find (collec, query, callback) {
+    mongoose.connection.db.collection(collec, function (err, collection) {
+    collection.find(query).toArray(callback);
+    });
+}
+
 app.use(express['static'](__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
@@ -29,7 +36,7 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-
+/*
 // return the URI of top search result for the given track name
 function getSpotifyUri(songName) {
     spotifyApi.searchTracks(songName, {limit: 1})
@@ -41,8 +48,9 @@ function getSpotifyUri(songName) {
         console.error(err);
     });
 }
+*/
 
-getSpotifyUri("Technologic");
+// getSpotifyUri("Technologic");
 
 // SCHEMA GOES HERE:
 var Song = mongoose.model('Song', {
