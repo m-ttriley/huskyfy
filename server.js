@@ -78,9 +78,11 @@ var Song = mongoose.model('Song', {
 });
 
 
+
 app.get('/api/building/:latitude/:longitude', function (req, res, next) {
-  res.json(findClosestBuilding(req.params.latitude, req.params.longitude, getCollection('buildings'));
+  res.json(findClosestBuilding(req.params.latitude, req.params.longitude, getCollection('buildings')));
 });
+
 
 // to get the whole list of songs
 app.get('/api/song', function (req, res) {
