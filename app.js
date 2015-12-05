@@ -1,6 +1,6 @@
-var Container = React.createClass({
+    var Container = React.createClass({
     getInitialState: function() {
-        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'};
+        return {currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k'}
     },
 
     songA: function() {
@@ -15,15 +15,11 @@ var Container = React.createClass({
         });
     },
 
-    setSong: function(uri) {
-      this.setState({
-            currentSong:  'https://embed.spotify.com/?uri=' + uri;
-      })
-    },
-
     render: function() {
         return (
             <div>
+            <div>
+            </div>
             <div> 
             <button type='button' onClick={this.songA} />
             <Player song={this.state.currentSong} />
@@ -40,7 +36,7 @@ var Container = React.createClass({
 var Player = React.createClass({
     render: function() {
         return (
-            <iframe src={this.props.song} width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src={this.props.song} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
             );
     }
 });
