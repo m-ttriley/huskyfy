@@ -97,32 +97,18 @@ app.get('/api/songs/:buildingID', function (req, res, next) {
     });
 });
 // posting a new song to our database
-app.post('/api/song', function (req, res) {
-    console.log(req.body.building_id);
-    console.log(req.body.uri);
-    console.log(req.body.title);
-    console.log(req.body.artist);
-    console.log(req.body.album);
-    console.log(req.body.user);
-    console.log(req.body.date);
+app.post('/api/songs/', function (req, res) {
     console.log("post started");
 
-    var newSong = new Song({
-        building_id: req.body.building_id,
-        uri: req.body.uri,
-        title: req.body.title,
-        artist: req.body.artist,
-        album: req.body.album,
+    var newSong = new Songs({
+        building_id: req.body.building,
         user: req.body.user,
-        date: req.body.date
+        uri: req.body.track.uri.substr(15),
+        title: 'test',
+        artist: 'test',
+        album: 'test'
     }).save(function(err) {
         console.log(err);
-    });
-
-    Songs.find({
-        building_id: req.params.building
-    }, function(err, songs) {
-        res.json(songs);
     });
 });
 

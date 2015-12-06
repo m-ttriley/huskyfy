@@ -21,7 +21,6 @@ var Container = React.createClass({
 
     componentDidMount: function() {
       $.get('/api/building/' + position.coords.latitude + '/' + position.coords.longitude, function(result) {
-        console.log(result);
         if(this.isMounted()) {
         this.setState({
           building: result,
@@ -29,7 +28,6 @@ var Container = React.createClass({
         });
       }
       }.bind(this));
-      console.log(this.state);
     },
 
     render: function() {
@@ -41,8 +39,8 @@ var Container = React.createClass({
               <div id='content'> 
                 <Player buildingName={this.state.building.name} url={this.state.songURL} />
               <div>
-                  <Signup building={this.state.building._id} url="/api/songs/" />
-                </div>
+                  <Signup building={this.state.building._id} />
+              </div>
               </div>
             </div>
             );
@@ -58,9 +56,7 @@ var Player = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) { 
-    console.log(this.props.url);
     $.get(this.props.url, function(result) {
-      console.log(result);
       this.setState({
         songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + this.props.buildingName + ':' + result.map(function(song) {
           return song.uri;
@@ -69,7 +65,6 @@ var Player = React.createClass({
         })
       });
     }.bind(this));
-    console.log(this.state.songs);
 
   },
 
@@ -81,8 +76,12 @@ var Player = React.createClass({
     });
 
 var Signup = React.createClass({
+  getInitialState: function() {
+    return {};
+  },
 
-    handleSearch: function(query) {
+  handleSearch: function(query) {
+    var self = this;
       $.ajax({
         url: 'https://api.spotify.com/v1/search',
         type: 'GET',
@@ -91,24 +90,25 @@ var Signup = React.createClass({
           type: 'track'
         },
         success: function(data) {
-          // TODO: add this to the database
-          $.post({
-            url: '/api/song',
+          console.log(data);
+          $.ajax({
+            url: '/api/songs/',
             type: 'POST',
             data: {
               track: data.tracks.items[0],
-              building: building
+              building: self.props.building,
+              user: 'admin'
             },
             success: function(data) {
-            // reload widget
+              console.log(data);
             },
             error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
+            console.error(status, err.toString());
             },
           });
         },
         error: function(xhr, status, err) {
-          console.error(this.props.url, status, err.toString());
+          console.error(status, err.toString());
         }.bind(this)
       });
     },
@@ -116,7 +116,7 @@ var Signup = React.createClass({
     render: function() {
       return (
         <div>
-          <SignupForm handleSearch={this.handleSearch} />
+          <SignupForm building={this.props.building} handleSearch={this.handleSearch} />
         </div>
       );
     }
@@ -125,7 +125,7 @@ var Signup = React.createClass({
   var SignupForm = React.createClass({
     handleSubmit: function(e) {
     e.preventDefault();
-        var trackURL = React.findDOMNode(this.refs.trackSearch).value.trim();
+        var trackURL = ReactDOM.findDOMNode(this.refs.trackSearch).value.trim();
         if (!trackURL) {
             return;
           }
