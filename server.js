@@ -94,7 +94,8 @@ app.get('/api/songs/:buildingID', function (req, res, next) {
         building_id: req.params.buildingID
     }, function(err, songs) {
         res.json(songs);
-
+    });
+});
 // posting a new song to our database
 app.post('/api/song', function (req, res) {
     console.log(req.body.building_id);
