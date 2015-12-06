@@ -80,20 +80,6 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-/*
-// return the URI of top search result for the given track name
-function getSpotifyUri(songName) {
-    spotifyApi.searchTracks(songName, {limit: 1})
-    .then(function(data) {
-        var uri = data.body.tracks.items[0].uri;
-        console.log('Spotify URI of', songName, uri, "\n");
-        updatePlayer(uri);
-    }, function(err) {
-        console.error(err);
-    });
-}
-*/
-
 
 app.get('/api/building/:latitude/:longitude', function (req, res, next) {
     Buildings.find(function(err, buildings) {
@@ -102,36 +88,41 @@ app.get('/api/building/:latitude/:longitude', function (req, res, next) {
     });
 });
 
+
 app.get('/api/songs/:buildingID', function (req, res, next) {
     Songs.find({
         building_id: req.params.buildingID
     }, function(err, songs) {
         res.json(songs);
-    });
-});
 
-app.post('/api/songs/', function (req, res, next) {
-    console.log(req);
-    /*
-    var newSong = new Songs({
-        building_id: req.params.building,
-        user: 'Admin',
-        uri: req.params.track.uri,
-        title: 'testURI',
-        album: 'testURI',
-        artist: 'testURI'
+// posting a new song to our database
+app.post('/api/song', function (req, res) {
+    console.log(req.body.building_id);
+    console.log(req.body.uri);
+    console.log(req.body.title);
+    console.log(req.body.artist);
+    console.log(req.body.album);
+    console.log(req.body.user);
+    console.log(req.body.date);
+    console.log("post started");
+
+    var newSong = new Song({
+        building_id: req.body.building_id,
+        uri: req.body.uri,
+        title: req.body.title,
+        artist: req.body.artist,
+        album: req.body.album,
+        user: req.body.user,
+        date: req.body.date
     }).save(function(err) {
-        if(err)
-            console.log(err);
+        console.log(err);
     });
-
 
     Songs.find({
         building_id: req.params.building
     }, function(err, songs) {
         res.json(songs);
     });
-*/
 });
 
 
