@@ -11,10 +11,7 @@ function showPosition(position) {
     var latlon = position.coords.latitude + "," + position.coords.longitude;
 
     var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=42.3380307,-71.0899268&zoom=17.33&size=500x500&sensor=false&markers=size:small%7Ccolor:0xff2600%7Clabel:2%7C" + latlon;
-    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
 };
-
-});
 function showError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -31,3 +28,4 @@ function showError(error) {
             break;
     }
 }
+});

@@ -1,53 +1,84 @@
+$(function() {
+(function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        
+    }
+})();
 
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=42.3380307,-71.0899268&zoom=17.33&size=500x500&sensor=false&markers=size:small%7Ccolor:0xff2600%7Clabel:2%7C" + latlon;
 
 var Container = React.createClass({
     getInitialState: function() {
-        return {
-          currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k',
-          location: {
-            latitude: 0,
-            longitude: 0
-          }
-        }
+      return {
+        building: '',
+        songURL: ''
+      };
     },
 
-    songA: function() {
+    componentDidMount: function() {
+      $.get('/api/building/' + position.coords.latitude + '/' + position.coords.longitude, function(result) {
+        console.log(result);
+        if(this.isMounted()) {
         this.setState({
-            currentSong: 'https://embed.spotify.com/?uri=spotify:user:121023616:playlist:0hmTkcOW36gH3JA53ILYZE'
+          building: result,
+          songURL: '/api/songs/' + result._id
         });
-    },
-
-    songB: function() {
-        this.setState({
-            currentSong: 'https://embed.spotify.com/?uri=spotify%3Atrack%3A5H25xsIuRWUI8GwcoAoeSG' 
-        });
+      }
+      }.bind(this));
+      console.log(this.state);
     },
 
     render: function() {
         return (
             <div>
-            <div>
-            </div>
-            <div> 
-            <button type='button' onClick={this.songA} />
-            <Player song={this.state.currentSong} />
-            <button type='button' onClick={this.songB} />
-            </div>
-            <div>
-            <Signup url="/api/song" />
-            </div>
+              <div id='mapholder'>
+                <img src={img_url} />
+              </div>
+              <div id='content'> 
+                <Player buildingName={this.state.building.name} url={this.state.songURL} />
+              <div>
+                  <Signup building={this.state.building._id} url="/api/songs/" />
+                </div>
+              </div>
             </div>
             );
         }
     });
 
 var Player = React.createClass({
+
+  getInitialState: function() { 
+    return {
+      songs: ''
+    };
+  },
+
+  componentDidUpdate: function(prevProps, prevState) { 
+    console.log(this.props.url);
+    $.get(this.props.url, function(result) {
+      console.log(result);
+      this.setState({
+        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + this.props.buildingName + ':' + result.map(function(song) {
+          return song.uri;
+        }).reduce(function(previousValue, currentValue, currentIndex, array) {
+          return previousValue + ',' + currentValue;
+        })
+      });
+    }.bind(this));
+    console.log(this.state.songs);
+
+  },
+
     render: function() {
         return (
-            <iframe src={this.props.song} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
-            );
+            <iframe src={this.state.songs} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
+        );
     }
-});
+    });
 
 var Signup = React.createClass({
 
@@ -60,21 +91,21 @@ var Signup = React.createClass({
           type: 'track'
         },
         success: function(data) {
-          // todo: add this to the database
-          $.ajax({
+          // TODO: add this to the database
+          $.post({
             url: '/api/song',
             type: 'POST',
             data: {
-              track: data.tracks.items[0]
-            }
-          },
-          success: function(data) {
+              track: data.tracks.items[0],
+              building: building
+            },
+            success: function(data) {
             // reload widget
-          },
-
-          error: function(xhr, status, err) {
+            },
+            error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
-          }
+            },
+          });
         },
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -115,4 +146,23 @@ var Signup = React.createClass({
 
 ReactDOM.render(
     <Container />, 
-    document.getElementById('content'));
+    document.getElementById('main'));
+};
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+});
+

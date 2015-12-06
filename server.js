@@ -22,6 +22,32 @@ connect();
 mongoose.connection.on('error', console.log);
 mongoose.connection.on('disconnected', connect);
 
+var Buildings = mongoose.model('Building', 
+    mongoose.Schema({
+        _id: Number, 
+        latitude: Number,
+        display_name: String,
+        types: [String],
+        name: String,
+        longitude: Number,
+    }),
+    'buildings');
+
+var Songs = mongoose.model('Song',
+    mongoose.Schema({
+        building_id: Number,
+        user: String,
+        uri: String,
+        title: String,
+        album: String,
+        artist: String
+    }), 
+    'songs');
+
+
+
+
+/*
 function getCollection(collec) {
     return mongoose.connection.db.collection(collec);
 }
@@ -30,6 +56,7 @@ function find (collec, query, callback) {
     collection.find(query).toArray(callback);
     });
 }
+*/
 function findClosestBuilding (lat, longitude, buildings) {
     // Math.abs(x1-x0) + Math.abs(y1-y0)
     var distance = 10000;
@@ -44,6 +71,8 @@ function findClosestBuilding (lat, longitude, buildings) {
 
     return closestBuilding;
 }
+
+
 app.use(express['static'](__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
@@ -65,63 +94,46 @@ function getSpotifyUri(songName) {
 }
 */
 
-// getSpotifyUri("Technologic");
-
-// SCHEMA GOES HERE:
-var Song = mongoose.model('Song', {
-    building: Number,
-    trackURL: String,
-    artist: String,
-    album: String,
-    date: Date
-
-});
-
-
 
 app.get('/api/building/:latitude/:longitude', function (req, res, next) {
-  res.json(findClosestBuilding(req.params.latitude, req.params.longitude, getCollection('buildings')));
-});
-
-
-// to get the whole list of songs
-app.get('/api/song', function (req, res) {
-
-    Song.find(function (err, users) {
-        if (err) res.send(err);
-
-        res.json(users);
+    Buildings.find(function(err, buildings) {
+        var loc = findClosestBuilding(req.params.latitude, req.params.longitude, buildings);
+        res.json(loc);
     });
 });
 
-
-// posting a new song to our database
-app.post('/api/song', function (req, res) {
-    console.log(req.body.building);
-    console.log(req.body.trackURL);
-    console.log(req.body.artist);
-    console.log(req.body.album);
-    console.log(req.body.date);
-    console.log("post started");
-
-    var newSong = new Song({
-        building: req.body.building,
-        trackURL: req.body.trackURL,
-        artist: req.body.artist,
-        album: req.body.album,
-        date: req.body.date
-    });
-
-    newSong.save(function (err) {
-        if (err) console.log('registration failed');
-    });
-
-    Song.find(function (err, users) {
-        if (err) res.send(err);
-
-        console.log(users);
+app.get('/api/songs/:buildingID', function (req, res, next) {
+    Songs.find({
+        building_id: req.params.buildingID
+    }, function(err, songs) {
+        res.json(songs);
     });
 });
+
+app.post('/api/songs/', function (req, res, next) {
+    console.log(req);
+    /*
+    var newSong = new Songs({
+        building_id: req.params.building,
+        user: 'Admin',
+        uri: req.params.track.uri,
+        title: 'testURI',
+        album: 'testURI',
+        artist: 'testURI'
+    }).save(function(err) {
+        if(err)
+            console.log(err);
+    });
+
+
+    Songs.find({
+        building_id: req.params.building
+    }, function(err, songs) {
+        res.json(songs);
+    });
+*/
+});
+
 
 app.get('/', function (req, res) {
     res.sendfile('./public/index.html');
