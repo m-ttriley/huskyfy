@@ -10,7 +10,7 @@ class SongView(Treeview):
     Represents a list view for displaying lists of songs
     """
     _columns = ("Song", "Artist", "Album", "URI", "User", "Date")
-    _col_widths = (150, 150, 150, 150, 150, 150)
+    _col_widths = (150, 150, 150, 180, 120, 150)
 
     def __init__(self, parent=None, songs=None):
         """

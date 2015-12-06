@@ -59,7 +59,7 @@ current_id = 0
 for full, short, lattitude, longitude in academic:
     building_list.append({"_id": current_id, "name": full,
                           "display_name": short, "types": ["academic"],
-                          "lattitude": lattitude, "longitude": longitude})
+                          "latitude": lattitude, "longitude": longitude})
     ids[short] = current_id
     current_id += 1
 
@@ -73,7 +73,7 @@ for full, short, lattitude, longitude in residential:
     if not found:
         building_list.append({"_id": current_id, "name": full,
                               "display_name": short, "types": ["residential"],
-                              "lattitude": lattitude, "longitude":longitude})
+                              "latitude": lattitude, "longitude":longitude})
         ids[short] = current_id
         current_id += 1
 
@@ -87,7 +87,7 @@ for full, short, lattitude, longitude in other:
     if not found:
         building_list.append({"_id": current_id, "name": full,
                               "display_name": short, "types": ["other"],
-                              "lattitude": lattitude, "longitude":longitude})
+                              "latitude": lattitude, "longitude":longitude})
         ids[short] = current_id
         current_id += 1
 
@@ -101,9 +101,9 @@ song_data = [
     "Nick", datetime.datetime(2015, 12, 4, 12, 20)),
     (ids["IV"], "One More Time", "Daft Punk", "Discovery", "0DiWol3AO6WpXZgp0goxAV",
     "Nick", datetime.datetime(2015, 12, 3, 17, 50)),
-    (ids["WVF"], "American Money", "Borns", "Dopamine", "4AewKenHXKBt643p473xCk",
+    (ids["Behrakis"], "American Money", "Borns", "Dopamine", "4AewKenHXKBt643p473xCk",
     "Nick", datetime.datetime(2015, 12, 2, 11, 23)),
-    (ids["Cabot"], "Migraine", "twenty one pilots", "Vessel", "4rfaoyaZvNa60cj3OKSQV9",
+    (ids["IV"], "Migraine", "twenty one pilots", "Vessel", "4rfaoyaZvNa60cj3OKSQV9",
     "Nick", datetime.datetime(2015, 12, 4, 13, 23)),
     (ids["WVF"], "Simple & Sweet", "Jon Bellion", "The Definition", "0wUlGPa8He68F9TmLKdcL4",
      "Nick", datetime.datetime(2015, 11, 30, 13, 10)),
@@ -116,7 +116,31 @@ song_data = [
     (ids["WVF"], "Taxi Cab", "twenty one pilots", "Twenty One Pilots", "4j8gmCSLLy0TSFg2brV01g",
     "Nick", datetime.datetime(2015, 12, 3, 23, 54)),
     (ids["Cabot"], "Goner", "twenty one pilots", "Blurryface", "5P3yUXUC9rZPJPNmYGKEAz",
-    "Nick", datetime.datetime(2015, 12, 3, 5, 32))
+    "Nick", datetime.datetime(2015, 12, 3, 5, 32)),
+    (ids["IV"], "We Sink", "CHVRCHES", "The Bones of What You Believe", "4t7EGF0kXG5KeFrQ7hxdc1",
+    "Nick", datetime.datetime(2015, 12, 3, 4, 34)),
+    (ids["IV"], "Unbelievers", "Vampire Weekend", "Modern Vampires of the City", "7psPPGwhFzP3pyOcb3ivcT",
+    "Nick", datetime.datetime(2015, 12, 3, 4, 35)),
+    (ids["IV"], "Divinity", "Porter Robinson", "Worlds", "18cCBvygH6yEFDY0cYN3wT",
+    "Nick", datetime.datetime(2015, 12, 3, 1, 23)),
+    (ids["IV"], "Lose Yourself to Dance", "Daft Punk", "Random Access Memories", "5CMjjywI0eZMixPeqNd75R",
+    "Nick", datetime.datetime(2015, 12, 4, 12, 43)),
+    (ids["IV"], "The General", "Dispatch", "Bang Bang", "6n6EXIwLtNwe4u4CFzENYm",
+    "Nick", datetime.datetime(2015, 12, 2, 23, 43)),
+    (ids["IV"], "Don't Sing", "Data", "Don't Sing", "3Q7Fhds0twd9SAHrcGTwYL",
+    "Nick", datetime.datetime(2015, 12, 1, 21, 42)),
+    (ids["IV"], "Space Oddity - 2015 Remaster", "David Bowie", "Five Years (1969 - 1973)", "5sUrZEf4qEtjepdgcetith",
+    "Nick", datetime.datetime(2015, 12, 3, 12, 43)),
+    (ids["IV"], "Superego", "Disclosure", "Caracal", "4vd7KzctkhCVCUnCCyoO0d",
+    "Nick", datetime.datetime(2015, 12, 2, 23, 12)),
+    (ids["IV"], "Sunrise", "Slaptop", "Sunrise", "0n0p8VGjFfQSXnCKUMPCWU",
+    "Nick", datetime.datetime(2015, 11, 30, 1, 32)),
+    (ids["IV"], "Paris", "Magic Man", "Before the Waves", "4EaO2XR7gWaHq8DW7nu1iY",
+    "Nick", datetime.datetime(2015, 12, 1, 23, 43)),
+    (ids["IV"], "Lifted Up (1985)", "Passion Pit", "Kindred", "0WjvB0SzNvgmuM46UjcMr8",
+    "Nick", datetime.datetime(2015, 11, 30)),
+    (ids["Behrakis"], "Paradise by the Dashboard Light", "Meatloaf", "Bat Out of Hell", "7mzHEzbsl5iOvBRuXwReZU",
+    "Nick", datetime.datetime(2015, 12, 3, 3, 43))
 ]
 
 # create a list of dictionaries to insert as songs into the db

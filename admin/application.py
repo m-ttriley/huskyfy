@@ -36,6 +36,7 @@ class Application:
         self.root = Tk()
         self.root.geometry("1040x520")
         self.root.title("Huskyfy Admin Manager")
+        self.root.iconbitmap(r"admin/icon.ico")
 
         # initialize a dictionary mapping building types to lists of buildings from the db
         self._get_buildings()
