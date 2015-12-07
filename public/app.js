@@ -59,14 +59,14 @@ var Player = React.createClass({
     };
   },
 
-  componentDidUpdate: function(prevProps, prevState) { 
-    $.get(this.props.url, function(result) {
+  componentWillReceiveProps: function(nextProps) { 
+    $.get(nextProps.url, function(result) {
       if(result.length === 0) {
 
       }
       else {
       this.setState({
-        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + this.props.buildingName + ':' + result.map(function(song) {
+        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + nextProps.buildingName + ':' + result.map(function(song) {
           return song.uri;
         }).reduce(function(previousValue, currentValue, currentIndex, array) {
           return previousValue + ',' + currentValue;
