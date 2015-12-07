@@ -33,6 +33,10 @@ var Container = React.createClass({
     render: function() {
         return (
             <div>
+            <div id='title'>
+                <h1> HuskyFy </h1>
+                <h1> {this.state.building.name} </h1>
+            </div>
               <div id='mapholder'>
                 <img src={img_url} />
               </div>
@@ -57,6 +61,10 @@ var Player = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) { 
     $.get(this.props.url, function(result) {
+      if(result.length === 0) {
+
+      }
+      else {
       this.setState({
         songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + this.props.buildingName + ':' + result.map(function(song) {
           return song.uri;
@@ -64,13 +72,14 @@ var Player = React.createClass({
           return previousValue + ',' + currentValue;
         })
       });
+    }
     }.bind(this));
 
   },
 
     render: function() {
         return (
-            <iframe src={this.state.songs} width="300" height="380" frameBorder="0" allowTransparency="true"></iframe>
+            <iframe src={this.state.songs} width="500" height="500" frameBorder="0" allowTransparency="true"></iframe>
         );
     }
     });
