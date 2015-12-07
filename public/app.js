@@ -97,7 +97,7 @@ var Signup = React.createClass({
             data: {
               track: data.tracks.items[0],
               building: self.props.building,
-              user: 'admin'
+              user: 'webuser'
             },
             success: function(data) {
               console.log(data);

@@ -40,7 +40,8 @@ var Songs = mongoose.model('Song',
         uri: String,
         title: String,
         album: String,
-        artist: String
+        artist: String,
+        date: Date
     }), 
     'songs');
 
@@ -99,14 +100,14 @@ app.get('/api/songs/:buildingID', function (req, res, next) {
 // posting a new song to our database
 app.post('/api/songs/', function (req, res) {
     console.log("post started");
-
     var newSong = new Songs({
         building_id: req.body.building,
         user: req.body.user,
-        uri: req.body.track.uri.substr(15),
-        title: 'test',
-        artist: 'test',
-        album: 'test'
+        uri: req.body.track.uri.substring(14),
+        title: req.body.track.name,
+        artist: req.body.track.artists[0].name,
+        album: req.body.track.album.name,
+        date: new Date().toISOString()
     }).save(function(err) {
         console.log(err);
     });
