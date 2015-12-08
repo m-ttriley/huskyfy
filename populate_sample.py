@@ -182,7 +182,7 @@ print("db.songs.createIndex({building_id: 1})\n\n")
 
 # write the commands to a file if necessary
 if to_file:
-    with open(file_path, 'w') as doc:
+    with open(file_path, 'a') as doc:
         for song in songs_list:
             doc.write("db.songs.insert(" + str(song).replace("datetime.datetime", "ISODate") + ")\n")
         doc.write("db.songs.createIndex({building_id: 1})\n")
