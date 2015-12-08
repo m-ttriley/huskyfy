@@ -9,7 +9,7 @@ $(function() {
 
 function showPosition(position) {
     var latlon = position.coords.latitude + "," + position.coords.longitude;
-    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=42.3380307,-71.0899268&zoom=17.33&size=500x500&sensor=false&markers=size:small%7Ccolor:0xff2600%7Clabel:2%7C" + latlon;
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=42.3380307,-71.0899268&zoom=17.33&size=500x660&sensor=false&markers=size:small%7Ccolor:0xff2600%7Clabel:2%7C" + latlon;
 
 var Container = React.createClass({
     getInitialState: function() {
@@ -34,8 +34,8 @@ var Container = React.createClass({
         return (
             <div>
             <div id='title'>
-                <h1> HuskyFy </h1>
-                <h1> {this.state.building.name} </h1>
+                <span id="title"> huskyfy </span>
+                <span id="subtitle"> {this.state.building.name} </span>
             </div>
               <div id='mapholder'>
                 <img src={img_url} />
@@ -160,6 +160,7 @@ var Signup = React.createClass({
         }
         this.props.handleSearch(trackURL, username);
         ReactDOM.findDOMNode(this.refs.trackSearch).value = '';
+        ReactDOM.findDOMNode(this.refs.username).value = '';
         return;
       },
 
@@ -167,9 +168,8 @@ var Signup = React.createClass({
         return (
           <form className="signupForm" onSubmit={this.handleSubmit}>
             <input type="text" placeholder="Search for a song to add" ref="trackSearch" />
-            <input type="submit" value="Add a song" /><br />
             <input type="text" placeholder="Enter your name (optional)" ref="username" />
-            
+            <br /><input type="submit" value="Add a song" class="btn" />
           </form>
           );
       }

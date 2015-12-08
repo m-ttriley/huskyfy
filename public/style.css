@@ -1,14 +1,75 @@
 #mapholder {
     float: left;
-    padding-left: 45px;
+    padding-left: 12px;
+    background-color: #FFFFFF;
 }
 
 #content {
     float: right;
-    padding-right: 45px;
+    padding-right: 12px;
+    background-color: #181818;
 }
 
 #title {
-    font-family: sans-serif;
+    color: #DDDDDD;
+    font-family: Comfortaa;
+    padding-left: 12px;
+    padding-bottom: 0px;
+    font-size: 52pt;
+    padding: 20px;
     text-align: center;
+}
+
+#subtitle {
+    color: #DDDDDD;
+    font-family: Comfortaa;
+    padding-left: 12px;
+    padding-bottom: 0px;
+    font-size: 26pt;
+    text-align: right;
+}
+
+
+body {
+    background-color: #BB0000;
+}
+
+input[type=submit] {
+  border: none;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #242424;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  font-family: Comfortaa;
+  margin: 0 auto;
+  display : block;
+  width: 84%;
+
+}
+
+input[type=submit]:hover {
+  background: #484848;
+  text-decoration: none;
+}
+
+input[type="text"] {
+  border: none;
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  font-family: Comfortaa;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  padding: 8px;
+  text-align: center;
+  background-color: #242424;
+  color: #DDDDDD;
+}
+
+input[type="text"]:focus {
+  outline: none;
 }
