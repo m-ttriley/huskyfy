@@ -1,7 +1,14 @@
 #mapholder {
     float: left;
+    padding-left: 45px;
 }
 
 #content {
     float: right;
+    padding-right: 45px;
+}
+
+#title {
+    font-family: sans-serif;
+    text-align: center;
 }

@@ -109,7 +109,10 @@ app.post('/api/songs/', function (req, res) {
         album: req.body.track.album.name,
         date: new Date().toISOString()
     }).save(function(err) {
-        console.log(err);
+        if(err) {
+            console.log(err);
+        }
+        res.send('Song added');
     });
 });
 

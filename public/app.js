@@ -41,9 +41,8 @@ var Container = React.createClass({
                 <img src={img_url} />
               </div>
               <div id='content'> 
-                <Player buildingName={this.state.building.name} url={this.state.songURL} />
+                <Player building={this.state.building} url={this.state.songURL} />
               <div>
-                  <Signup building={this.state.building._id} />
               </div>
               </div>
             </div>
@@ -66,7 +65,7 @@ var Player = React.createClass({
       }
       else {
       this.setState({
-        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + nextProps.buildingName + ':' + result.map(function(song) {
+        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + nextProps.building.name + ':' + result.map(function(song) {
           return song.uri;
         }).reduce(function(previousValue, currentValue, currentIndex, array) {
           return previousValue + ',' + currentValue;
@@ -77,9 +76,25 @@ var Player = React.createClass({
 
   },
 
+  updateSongs: function() {
+    $.get(this.props.url, function(result) {
+      console.log(result);
+      this.setState({
+        songs: 'https://embed.spotify.com/?uri=spotify:trackset:' + this.props.building.name + ':' + result.map(function(song) {
+          return song.uri;
+        }).reduce(function(previousValue, currentValue, currentIndex, array) {
+          return previousValue + ',' + currentValue;
+        })
+      });
+    }.bind(this));
+  },
+
     render: function() {
         return (
+            <div>
             <iframe src={this.state.songs} width="500" height="500" frameBorder="0" allowTransparency="true"></iframe>
+            <Signup updateSongs={this.updateSongs} building={this.props.building._id} />
+            </div>
         );
     }
     });
@@ -109,7 +124,7 @@ var Signup = React.createClass({
               user: 'webuser'
             },
             success: function(data) {
-              console.log(data);
+              self.props.updateSongs();
             },
             error: function(xhr, status, err) {
             console.error(status, err.toString());
