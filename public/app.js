@@ -47,7 +47,7 @@ var Container = React.createClass({
               </div>
             </div>
             );
-        }
+        },
     });
 
 var Player = React.createClass({
@@ -104,8 +104,9 @@ var Signup = React.createClass({
     return {};
   },
 
-  handleSearch: function(query) {
+  handleSearch: function(query, username) {
     var self = this;
+    console.log(username);
       $.ajax({
         url: 'https://api.spotify.com/v1/search',
         type: 'GET',
@@ -121,7 +122,7 @@ var Signup = React.createClass({
             data: {
               track: data.tracks.items[0],
               building: self.props.building,
-              user: 'webuser'
+              user: username
             },
             success: function(data) {
               self.props.updateSongs();
@@ -150,10 +151,14 @@ var Signup = React.createClass({
     handleSubmit: function(e) {
     e.preventDefault();
         var trackURL = ReactDOM.findDOMNode(this.refs.trackSearch).value.trim();
+        var username = ReactDOM.findDOMNode(this.refs.username).value.trim();
         if (!trackURL) {
             return;
           }
-        this.props.handleSearch(trackURL);
+        if (!username) {
+          username = "webuser";
+        }
+        this.props.handleSearch(trackURL, username);
         ReactDOM.findDOMNode(this.refs.trackSearch).value = '';
         return;
       },
@@ -162,7 +167,9 @@ var Signup = React.createClass({
         return (
           <form className="signupForm" onSubmit={this.handleSubmit}>
             <input type="text" placeholder="Search for a song to add" ref="trackSearch" />
-            <input type="submit" value="Add a song" />
+            <input type="submit" value="Add a song" /><br />
+            <input type="text" placeholder="Enter your name (optional)" ref="username" />
+            
           </form>
           );
       }

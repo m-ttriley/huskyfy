@@ -53,8 +53,13 @@ class InfoView(Frame):
         self.album_var = StringVar(master=self.parent, value=song.album)
         self.album_box = Entry(master=self.parent, text=self.album_var, width=40)
 
-        self.building_var = StringVar(master=self.parent,
-                                      value=self.building_collection.find_one({"_id": song.building_id})["display_name"])
+        try:
+            self.building_var = StringVar(master=self.parent,
+                                          value=self.building_collection.find_one({"_id": song.building_id})["display_name"])
+        except TypeError:
+            # adding a new song, so the building ID is blank
+            self.building_var = StringVar(master=self.parent, value="")
+
         self.building_box = Entry(master=self.parent, text=self.building_var, width=40)
 
         self.user_var = StringVar(master=self.parent, value=song.user)
@@ -78,7 +83,7 @@ class InfoView(Frame):
         """
         Updates the information in the database to the current values
         """
-        date_string = self.date_var.get()
+        date_string = self.date_var.get()[:19]
         # ensure that the user entered a valid date in the correct format
         try:
             date = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")

@@ -48,6 +48,7 @@ class Application:
         # initialize the search box and the search button
         self.search_value = StringVar()
         self.search_box = Entry(self.root, width=90, font=("Arial", 12), textvariable=self.search_value)
+        self.search_box.bind("<Return>", self.search)
         self.search_button = Button(self.root, text="Search", width=10, command=self.search)
 
         # initialize the drop down menu for selecting the type of building
@@ -127,7 +128,7 @@ class Application:
         """
         admin.info_view.InfoView(Song(None, "", "", "", "", building_id=None))
 
-    def search(self):
+    def search(self, event=None):
         """
         Opens a new window with the result of searching the given string across title, artist, album, and user
         """
@@ -139,9 +140,10 @@ class Application:
             results += list(self.song_collection.find({"album": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
             results += list(self.song_collection.find({"user": {"$regex": ".*" + search_string + ".*", "$options": "i"}}))
 
-        popup = admin.song_view.SongView(parent=Toplevel(),
-                                 songs=[Song.from_dict(result) for result in results])
+        popup = admin.song_view.SongView(parent=Toplevel(), songs=[Song.from_dict(result) for result in results])
         popup.grid()
+        popup.focus_force()
+        popup.bind("<Escape>", lambda event: popup.master.destroy())
 
     def render(self):
         """
