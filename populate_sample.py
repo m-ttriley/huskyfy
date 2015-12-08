@@ -8,6 +8,13 @@ import datetime
 if input("Are you sure you want to overwrite all data in the database with sample data? (y/n) ") != 'y':
     sys.exit(0)
 
+# determine whether the user wants to output the MongoDB insert commands to a given file
+to_file = False
+file_path = ""
+if len(sys.argv) == 3 and sys.argv[1] == "-f":
+    to_file = True
+    file_path = sys.argv[2]
+
 
 MONGO_URL = "mongodb://matt:riley@ds053794.mongolab.com:53794/huskyfy"
 
@@ -150,12 +157,34 @@ songs_list = [
     for building, title, artist, album, uri, user, date in song_data
 ]
 
+print("Equivalent MongoDB insert statements:\n\n")
+
 # remove any buildings that were already in the db
 buildings.remove()
+print("db.buildings.remove({})")
 buildings.insert_many(building_list)
+for building in building_list:
+    print("db.buildings.insert(" + str(building) + ")\n")
+
+# write the commands to a file if necessary
+if to_file:
+    with open(file_path, 'w') as doc:
+        for building in building_list:
+            doc.write("db.buildings.insert(" + str(building) + ")\n")
 
 # remove any songs that were already in the db
 songs.remove()
+print("db.songs.remove({})")
 songs.insert_many(songs_list)
+for song in songs_list:
+    print("db.songs.insert(" + str(song).replace("datetime.datetime", "ISODate") + ")\n")
+print("db.songs.createIndex({building_id: 1})\n\n")
 
+# write the commands to a file if necessary
+if to_file:
+    with open(file_path, 'w') as doc:
+        for song in songs_list:
+            doc.write("db.songs.insert(" + str(song).replace("datetime.datetime", "ISODate") + ")\n")
+        doc.write("db.songs.createIndex({building_id: 1})\n")
+        
 print("Database updated with {} songs and {} buildings.".format(len(songs_list), len(building_list)))
